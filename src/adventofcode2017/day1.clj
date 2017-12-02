@@ -1,4 +1,5 @@
 (ns adventofcode2017.day1)
+(require '[adventofcode2017.utils :as utils])
 
 (defn sumequals
   [x y acc]
@@ -49,8 +50,7 @@
 (defn solvepuzzle
   []
   (println "Enter puzzle input: ")
-  (def n (read-line))
-  (let [input (into [] (map #(Character/digit % 10), n))  ]
+  (let [input (utils/readInputNumbers 1)]
     (println "Your answer to 1: "  (start input))
     (println "Your answer to 2: "  (start2ndProblem input))
   )
