@@ -16,6 +16,10 @@
     (into [] (map read-string row))
 )
 
+(defn readInteger [day]
+    (read-string (first (readfileByLines day)))
+)
+
 (defn readAs2DArray [day]
     (into [] (->> 
             (map #(str/split % #"\t") (readfileByLines day))
