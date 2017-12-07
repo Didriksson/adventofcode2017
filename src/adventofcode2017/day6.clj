@@ -23,12 +23,10 @@
   ( [list] (distributeUntilRepeated 0 list '(list)))  
   ( [cycles currentState previousStates]
     (if (some #(= currentState %) previousStates)
-      cycles
+      [cycles currentState]
       (recur (inc cycles) (distributeOnce currentState) (conj previousStates currentState)))))
 
-(defn distributeUntilRepeatedInitialState
-  ( [list] (distributeUntilRepeatedInitialState 1 (distributeOnce list) list))
-  ( [cycles currentState stateToMatch]
+(defn distributeUntilState ( [cycles currentState stateToMatch]
     (if (= currentState stateToMatch)
       cycles
       (recur (inc cycles) (distributeOnce currentState) stateToMatch))))
@@ -36,7 +34,9 @@
 
 (defn solvepuzzle []
   (let [input (first (utils/readAs2DArray 6))]
-    (println "Puzzle answer 1: " (distributeUntilRepeated input))
-    (println "Puzzle answer 2: " (distributeUntilRepeatedInitialState input))
+    (let [result1 (distributeUntilRepeated input)]
+      (println "Puzzle answer 1: " (second result1))
+      (println "Puzzle answer 2: " (- (first result1) (distributeUntilState 0 input (second result1))))
+    )
   )
 )

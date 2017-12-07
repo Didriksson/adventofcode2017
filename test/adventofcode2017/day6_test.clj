@@ -19,6 +19,6 @@
 ;"(0) 3  0  1  -3  - before we have taken any steps."
 (deftest example2
   (testing "Same input should take 5 cycles until repeated."
-    (is (= (distributeUntilRepeatedInitialState [ 2 4 1 2 ]) 4))
+    (is (= (first (distributeUntilRepeated [ 2 4 1 2 ])) 4))
   )
 )
