@@ -15,25 +15,7 @@
     )))
 
 (defn getBottomProgram [input]
-  (let [right (mapcat #(get % :lifts) (parseFile "7_test"))
-       left (map #(get % :program) (parseFile "7_test"))]
+  (let [right (mapcat #(get % :lifts) (parseFile input))
+       left (map #(get % :program) (parseFile input))]
        (first (remove (set right) left))
-  ))
-
-(defn getNode [program tower]
-  (first (filter #(= program (get % :program)) tower))
-)
-
-(defn getAllLiftingNodes [program tower]
-    (into [] (map #(get % :program) (map #(getNode % tower) (get (getNode program tower) :lifts))))
-)
-
-(defn getAllLiftingNodesRecur [program tower allnodes]
-  Kanske något med (recur getAllLiftingNodes) typ typ.
-  (println program allnodes)
-  (if (empty? (getAllLiftingNodes program tower))
-    (cons program allnodes)
-    (map #(getAllLiftingNodesRecur % tower (cons % allnodes))
-      (getAllLiftingNodes program tower))
-  )
-)
+))

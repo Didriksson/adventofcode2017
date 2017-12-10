@@ -20,7 +20,7 @@
 (deftest example1
   (testing "In this example, tknk is at the bottom of the tower (the bottom program). 
     And is holding up ugml, padx, and fwft."
-    (is (= (getBottomProgram (parseFile "7_test")) "tknk" ))
+    (is (= (getBottomProgram "7_test") "tknk" ))
   )
 )
 

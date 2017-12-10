@@ -2,7 +2,6 @@
 (require '[clojure.string :as str])
 
 (defn readInputNumbers [day]
-    (println "Enter puzzle input: ")
     (into [] (map #(Character/digit % 10) 
         (slurp (str "resources/input/input" day ".txt"))))
 )
