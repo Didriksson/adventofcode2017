@@ -7,8 +7,12 @@
 )
 
 (defn readfileByLines [day]
-(-> (slurp (str "resources/input/input" day ".txt"))   
-    (str/split #"\n"))
+    (-> (slurp (str "resources/input/input" day ".txt"))   
+        (str/split #"\n"))
+)
+
+(defn readCommaseparatedIntegerlines [day]
+    (map read-string (first (map #(str/split % #",") (readfileByLines day))))
 )
 
 (defn toInteger [row]

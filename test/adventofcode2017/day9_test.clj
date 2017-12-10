@@ -1,6 +1,6 @@
 (ns adventofcode2017.day9_test
-  (:require [clojure.test :refer :all]
-            [adventofcode2017.day9 :refer :all]))
+(:require [clojure.test :refer :all]
+[adventofcode2017.day9 :refer :all]))
 
 (deftest example1
   (testing "<>, empty garbage."
