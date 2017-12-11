@@ -32,6 +32,23 @@
     )
   )
 
+  (deftest toAsciiCode
+    (testing "Testing convert strings to ascii values"
+      (is (= (first (toAscii "1")) 49))
+    )  
+  )
+
+  (deftest testConvertAndAppendPart2Input
+    (testing "Testing the convertion and appending of the knot hash for part 2"
+      (is (= (convertAndAppendPart2Input ["1,2,3"]) [49,44,50,44,51,17,31,73,47,23]))  
+    )
+  )
+
+  (deftest performXorBlocksOf16
+    (testing "XOR of doom"
+      (is (= (sparseHash [65 27 9 1 4 3 40 50 91 7 6 0 2 5 68 22]) 64))  
+    )  
+  )
   
   
   

@@ -37,11 +37,20 @@
   )
 )
 
+(defn toAscii [input]
+  (map int (.getBytes input))
+)
+
+(defn convertAndAppendPart2Input [input]
+  (flatten (concat (map toAscii input) '(17, 31, 73, 47, 23)))
+)
+
+(defn sparseHash [result]
+  (reduce bit-xor result)
+)
+
 (defn solvepuzzle []
-  (let [input (utils/readCommaseparatedIntegerlines 10)
-        result (performAllLengths 256 input)]
-        (println "Solved with puzzle input: " input)
+  (let [ result (performAllLengths 256 (utils/readCommaseparatedIntegerlines 10))]
         (println "Answer puzzle 1: " (* (first result) (second result)))
-        (println result)
   )
 )
