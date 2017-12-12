@@ -42,15 +42,34 @@
 )
 
 (defn convertAndAppendPart2Input [input]
-  (flatten (concat (map toAscii input) '(17, 31, 73, 47, 23)))
+  (flatten (concat (toAscii input) '(17, 31, 73, 47, 23)))
 )
 
-(defn sparseHash [result]
-  (reduce bit-xor result)
+(defn sparseHash [input]
+  (performAllLengths 256 (flatten (repeat 64 input)))
+)
+
+(defn denseHash [sparse]
+  (map #(reduce bit-xor %) (partition 16 sparse))
+)
+
+(defn denseHashToHexa [dense]
+    (map #(if (= (count %) 2) % (str "0"%)) (map #(Integer/toHexString %) dense))
+)
+
+(defn getHash [input]
+  (->
+    (convertAndAppendPart2Input input)
+    (sparseHash)
+    (denseHash)
+    (denseHashToHexa)
+    (str/join)
+  )  
 )
 
 (defn solvepuzzle []
   (let [ result (performAllLengths 256 (utils/readCommaseparatedIntegerlines 10))]
         (println "Answer puzzle 1: " (* (first result) (second result)))
   )
+   (println "Answer puzzle 2: " (getHash (first (utils/readfileByLines 10))))
 )
