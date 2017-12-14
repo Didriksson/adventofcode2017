@@ -10,7 +10,7 @@
 
   (deftest testingGetProgramsInGroup
     (testing "create graph and count"
-      (is (= (getProgramsInGroup ["0 <-> 2, 5" "2 <-> 0, 3, 4"]) 2 ))
+      (is (= (getProgramsInGroup ["0 <-> 2" "1 <-> 1" "2 <-> 0, 3, 4" "3 <-> 2, 4" "4 <-> 2, 3, 6" "5 <-> 6" "6 <-> 4, 5"] 0) 6 ))
     )  
   )
     

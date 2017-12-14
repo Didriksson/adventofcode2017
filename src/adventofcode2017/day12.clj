@@ -17,6 +17,17 @@
   )  
 )
 
-(defn getProgramsInGroup [input]
-    (alg/connected-components (addEdges (mapcat  parseEdge input) (uber/graph)))
+(defn getGroups [input]
+  (alg/scc (addEdges (mapcat  parseEdge input) (uber/graph)))  
+)
+
+(defn getProgramsInGroup [input node]
+  (let [result (getGroups input)]
+    (count (first (filter #(some (partial = node) %) result)))
+  )  
+)
+
+(defn solvepuzzle []
+  (println "Result puzzle 1: " (getProgramsInGroup (utils/readfileByLines 12) 0))
+  (println "Result puzzle 2: " (count (getGroups (utils/readfileByLines 12))))  
 )
