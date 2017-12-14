@@ -4,7 +4,7 @@
   
   (deftest parseEdgesTest
     (testing "parse edge"
-      (is (= (parseEdge "0 <-> 2, 5") {0 [2 5] } ) )
+      (is (= (parseEdge "0 <-> 2, 5") '( [0 2] [0 5] ) ) )
     )
   )
 

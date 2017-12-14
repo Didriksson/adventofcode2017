@@ -2,7 +2,7 @@
 (require '[clojure.string :as str])
 (require '[adventofcode2017.utils :as utils])
 (require '[ubergraph.core :as uber])
-
+(require '[ubergraph.alg :as alg])
 
 (defn parseEdge [edgeString]
   (let [ result (map read-string (str/split (str/replace (str/replace edgeString #"<-> " "") #"," "") #" "))]
@@ -11,7 +11,6 @@
 )
 
 (defn addEdges [edges graf]
-  (println edges graf)
   (if (empty? edges)
     graf
     (recur (rest edges) (uber/add-edges graf (first edges)))
@@ -19,5 +18,5 @@
 )
 
 (defn getProgramsInGroup [input]
-    (uber/pprint (addEdges (map parseEdge input) (uber/graph)))
+    (alg/connected-components (addEdges (mapcat  parseEdge input) (uber/graph)))
 )
