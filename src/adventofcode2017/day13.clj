@@ -74,6 +74,5 @@
 
 (defn solvepuzzle []
   (println "Answer puzzle 1: " (performTripNoDelay {:position 0 :severity 0} (parseInput (utils/readfileByLines 13))))
-  (println "Answer puzzle 2: " (tryDelayTrips (parseInput (utils/readfileByLines 13)) 0))
-  
+  (time (println "Answer puzzle 2: " (tryDelayTrips (parseInput (utils/readfileByLines 13)) 0))) 
 )
