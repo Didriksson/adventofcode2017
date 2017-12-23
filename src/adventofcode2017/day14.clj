@@ -1,5 +1,7 @@
-(ns adventofcode2017.day14)
+(ns adventofcode2017.day14
+  (:require [clojure.math.numeric-tower :as math]))
 (require '[clojure.string :as str])
+(require 'clojure.set)   
 (require '[adventofcode2017.utils :as utils])
 (require '[adventofcode2017.day10 :as day10])
 
@@ -24,8 +26,8 @@
 
 (defn getDefragItem [char]
   (if (= char \1)
-    {:status :used  :group nil}
-    {:status :empty :group nil}
+    "U"
+    "E"
   )
 )
 
@@ -37,43 +39,62 @@
   (into [] (map getDefragRow (map rowToHex (getBinaryString input size))))  
 )
 
-(defn checkAndUpdateNode [data currentPos comparePos]
-  (let [current (get-in data currentPos) compare (get-in data comparePos)]
-    (if (= (get current :status) :empty)
-      data
-      (if (= (get compare :status) :empty)
-        data
-        (assoc-in data currentPos (assoc current :group (get compare :group)))))))
-
-(defn checkAbove [data rownumber]
-  (let [indexes (for [x (range (count (first data)))]
-    [rownumber x])]
-    (loop [state data indexList indexes]
-      (if (empty? indexList)
-        state
-        (recur (checkAndUpdateNode state (first indexList) [(dec (first (first indexList))) 
-          (second (first indexList)) ]) (rest indexList))))))
-
-(defn checkThyNeighbours [data]
-    (let [indexes (for [x (range (count data)) y (range (count (first data)))]
-      [x y])]
-      (loop [state data indexList indexes]
-        (if (empty? indexList)
-          state
-          (recur (checkAndUpdateNode state (first (first indexList)) (second (first indexList))) (rest indexList))
-        )
-      )
-    )
+(defn updateGroup [data nodepos value]
+  (println "Updating " nodepos " with " value ". Previous value: " (get-in data nodepos))
+  (assoc-in data nodepos (assoc (get data nodepos) :group value))
 )
 
-(defn getNumberOfNeightbourgroups [input]
-  (->
-    (checkThyNeighbours input)
-    (flatten)
-    (distinct)
-    (count)
-    (dec)
+(defn findUnsetNodes [data]
+  (into #{} (for [[x row] (map-indexed vector data) 
+    [y val] (map-indexed vector row)
+    :when (= "U" val) ]
+    [x y]
+  ))  
+)
+
+(defn distanceOneAway [n1 potentialNodes]
+  (filter #(= 1 (+ (math/abs (- (first n1) (first %))) (math/abs (- (second n1) (second %))))) potentialNodes)
+)
+
+(defn getSnakingGroups [unsetNodes]
+  (loop [potentialNodes unsetNodes foundnodes (cons (first unsetNodes) #{})]
+    (let [matchingNodes (distinct (apply concat (map #(distanceOneAway % potentialNodes) foundnodes)))]
+      (if (or (empty? matchingNodes) (empty? potentialNodes))
+        foundnodes
+        (recur (clojure.set/difference potentialNodes matchingNodes) (concat matchingNodes foundnodes))
+;        (recur (rest potentialNodes) (distinct (concat foundnodes (mapcat #(distanceOneAway % (rest potentialNodes)) (cons (first potentialNodes) foundnodes)))))
+      )
+    )
   )
+)
+
+(defn setNode [data nodepos value]
+  (assoc-in data nodepos value)
+)
+
+(defn setAllNodesToValue [data nodes value]
+  (loop [state data nodestoset nodes]
+    (if (empty? nodestoset)
+      state
+      (recur (setNode state (first nodestoset) value) (rest nodestoset))
+    )
+  )
+)
+
+(defn findAndSetNodeAndRelatedNodes [data]
+  (loop [unset (findUnsetNodes data) state data]
+    (if (empty? unset)
+      state
+      (let [newState (setAllNodesToValue state (getSnakingGroups unset) 
+                                                      (str/join (first unset)))]
+        (recur (findUnsetNodes newState) newState)
+      )
+    )
+  )
+)  
+
+(defn checkThyNeighbours [data]
+  (findAndSetNodeAndRelatedNodes data)      
 )
 
 (defn solvepuzzle []
